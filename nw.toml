@@ -1,0 +1,98 @@
+[application]
+name = "slyvex-desktop"
+title = "Slyvex Desktop"
+version = "package.json::version"
+organization = "Slyvex Network"
+
+[description]
+short = "Desktop Node and Wallet for Slyvex"
+long = """
+Slyvex Desktop is a desktop wallet and a p2p network node instance. This
+application allows you to participate in the Slyvex network by running a
+local node instance and offers access to a local wallet, compatible with
+the web wallet available at https://wallet.slyvex.network
+"""
+
+[package]
+archive = { include = true }
+signatures = ["SHA256"]
+build = [
+    { NPM = { clean = true } }
+]
+resources = "resources/setup"
+output = "setup/$PLATFORM-$ARCH"
+include = [
+    { glob = [
+            "bin/*",
+            "*.js",
+            "resources/**.css",
+            "resources/images/*.*",
+            "resources/**.ttf",
+            "resources/**.woff",
+            "resources/**.svg",
+            "i18n.*",
+            "modules/*",
+            "lib/*",
+            "node_modules/*",
+            "package.json"
+        ]},
+]
+
+[[action]]
+items = [{ copy = { glob = [
+        ".templates",
+        ".defaults",
+        "CHANGELOG.md"
+    ], to = "$TARGET", hidden = true}}]
+
+[[dependency]]
+name = "slyvexd"
+git = { url = "https://github.com/slyvex-core/slyvexd", branch = "master" }
+run = [
+    { cmd = "go build" },
+    { cmd = "go build", cwd = "cmd/genkeypair" },
+    { cmd = "go build", cwd = "cmd/slyvexctl" },
+    { cmd = "go build", cwd = "cmd/slyvexwallet" },
+]
+copy = [
+    { regex = [
+        "slyvexd(.exe)?$",
+        "genkeypair(.exe)?$",
+        "slyvexctl(.exe)?$",
+        "slyvexwallet(.exe)?$",
+    ], to = "bin/$PLATFORM-$ARCH", flatten = true },
+]
+
+[nwjs]
+version = "0.85.0"
+ffmpeg = false
+
+[macos-disk-image]
+window_caption_height = 60
+window_position = [400,100]
+window_size = [485,330]
+icon_size = 72
+application_icon_position = [100,158]
+system_applications_folder_position = [385,158]
+
+[windows]
+uuid = "8d51c029-f5dc-44d8-b453-f93629fee7b7"
+group = "Slyvex"
+run_after_setup = true
+
+[images]
+application="logo.png"
+macos-application="logo.png"
+macos-disk-image="logo.png"
+innosetup-icon="logo.png"
+innosetup-wizard-small="logo.png"
+innosetup-wizard-large="logo.png"
+
+[languages]
+languages = ["dutch", "english", "finnish", "french", "german", "italian", "polish", "portuguese", "russian", "spanish", "turkish", "ukranian"]
+
+[firewall]
+application = { direction = "in+out" }
+rules = [
+    { name = "Slyvex Node", program = "bin/windows-x64/slyvexd.exe", direction="in+out" }
+]

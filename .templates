@@ -1,0 +1,31 @@
+{
+	"slyvexd-node-only": {
+		"description": "Slyvexd Node",
+		"modules": {
+			"slyvexd:kd0": {
+				"reset-peers": false,
+				"args":{
+					"rpclisten": "0.0.0.0:28110",
+					"listen": "0.0.0.0:28111",
+					"addpeer": "194.180.19.59:28111",
+					"profile": 8110
+				}
+			}
+		}
+	},
+	"slyvexd-archival-only" : {
+		"description": "Slyvexd Archival Node",
+		"modules": {
+			"slyvexd:kd0": {
+				"reset-peers": false,
+				"args": {
+					"archival": null,
+					"rpclisten": "0.0.0.0:28110",
+					"listen": "0.0.0.0:28111",
+					"addpeer": "194.180.19.59:28111",
+					"profile": 8110
+				}
+			}
+		}
+	}
+}
